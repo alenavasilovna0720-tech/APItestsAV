@@ -40,6 +40,34 @@ class TestPet:
 
 
 
+    @allure.title("Обновление информации о питомце")
+    def test_update_pet_by_id(self):
+        pet_id = random.randint(100000, 999999)
+        payload = {
+            "id": pet_id,
+            "name": "Buddy",
+            "status": "available"
+        }
+
+        with allure.step("Создание питомца (подготовка данных)"):
+            response = requests.post(url=f"{BASE_URL}/pet", json=payload)
+            assert response.status_code == 200, f"Ошибка создания: {response.text}"
+        update_payload = {
+            "id": pet_id,
+            "name": "Buddy Updated",
+            "status": "sold"
+        }
+        with allure.step("Обновление информации о питомце"):
+            put_response = requests.put(url=f"{BASE_URL}/pet", json=update_payload)
+            assert put_response.status_code == 200, f"Ошибка обновления! Сервер ответил: {put_response.status_code}. Тело: {put_response.text}"
+            data = put_response.json()
+            assert data["id"] == pet_id, "Информация о питомце не обновилась"
+            assert data["name"] == "Buddy Updated"
+            assert data["status"] == "sold"
+
+
+
+
 
 
 
