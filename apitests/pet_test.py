@@ -52,8 +52,13 @@ class TestPet:
         with allure.step("Создание питомца (подготовка данных)"):
             response = requests.post(url=f"{BASE_URL}/pet", json=payload)
             assert response.status_code == 200, f"Ошибка создания: {response.text}"
+        update_payload = {
+            "id": pet_id,
+            "name": "Buddy Updated",
+            "status": "sold"
+        }
         with allure.step("Обновление информации о питомце"):
-            put_response = requests.put(url=f"{BASE_URL}/pet/{pet_id}", json=payload)
+            put_response = requests.put(url=f"{BASE_URL}/pet/{pet_id}", json=update_payload)
             data = put_response.json()
             assert data [id] == pet_id, "Информация о питомце не обновилась"
 
