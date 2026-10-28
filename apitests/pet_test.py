@@ -65,6 +65,35 @@ class TestPet:
             assert data["name"] == "Buddy Updated"
             assert data["status"] == "sold"
 
+    @allure.title("Удаление питомца по ID")
+    def test_delete_pet(self):
+        pet_id = random.randint(100000, 999999)
+        payload = {
+            "id": pet_id,
+            "name": "Buddy",
+            "status": "available"
+        }
+
+        with allure.step("Создание питомца (подготовка данных)"):
+            response = requests.post(url=f"{BASE_URL}/pet", json=payload)
+            assert response.status_code == 200, f"Ошибка создания: {response.text}"
+
+        with allure.step("Удаление питомца"):
+            delete_response = requests.delete(url=f"{BASE_URL}/pet/{pet_id}")
+
+            assert delete_response.status_code == 200, f"Ошибка удаления: {delete_response.text}"
+
+        with allure.step("Проверка, что питомец удален"):
+
+            get_response = requests.get(url=f"{BASE_URL}/pet/{pet_id}")
+
+
+            assert get_response.status_code == 404, f"Питомец не удалился! Ответ: {get_response.text}"
+
+
+
+
+
 
 
 
