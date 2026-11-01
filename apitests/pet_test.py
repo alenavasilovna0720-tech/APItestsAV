@@ -94,6 +94,38 @@ class TestPet:
 
 
 
+    allure.title("Создание нового питомца")
+    def test_add_pet(self):
+        pet_id = random.randint(100000, 999999)
+        payload = {
+            "id": pet_id,
+            "name": "doggie",
+            "category": {
+                "id": 1,
+                "name": "Dogs"
+            },
+            "photoUrls": ["string"],
+            "tags":[
+                {
+                    "id": 0,
+                    "name": "string"
+                }
+            ],
+            "status": "available"
+        }
+        with allure.step("Отправка POST-запроса с полными данными"):
+            post_response = requests.post(url=f"{BASE_URL}/pet", json=payload)
+            assert post_response.status_code == 200, f"Ошибка: {post_response.text}"
+        with allure.step("Проверка, что ответ содержит все переданные данные"):
+            data = post_response.json()
+            assert data["id"] == pet_id
+            assert data["name"] == "doggie"
+            assert data["category"]["name"] == "Dogs"
+            assert data["photoUrls"] == ["string"]
+            assert data["tags"] == [{"id": 0, "name": "string"}]
+
+
+
 
 
 
