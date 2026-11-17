@@ -1,8 +1,11 @@
+
 import allure
 import requests
 import random
 
 BASE_URL = "https://petstore.swagger.rv-school.ru/api/v3"
+
+
 
 @allure.feature("Pet")
 class TestPet:
@@ -123,6 +126,18 @@ class TestPet:
             assert data["category"]["name"] == "Dogs"
             assert data["photoUrls"] == ["string"]
             assert data["tags"] == [{"id": 0, "name": "string"}]
+
+
+
+    @allure.title("Получение списка питомцев по статусу")
+    def test_find_pets_by_status (self, created_pet_id):
+       with allure.step("Получение списка питомцев по статусу 'available'"):
+           get_response = requests.get(url=f"{BASE_URL}/pet/findByStatus", params={"status": "available"})
+           assert get_response.status_code == 200, f"ошибка {get_response.status_code}"
+           data = get_response.json()
+           assert isinstance(data, list), "Ответ сервера не является списком"
+           pet_ids = [pet["id"] for pet in data]
+           assert created_pet_id in pet_ids, "Созданного питомца нет в списке со статусом available!"
 
 
 
