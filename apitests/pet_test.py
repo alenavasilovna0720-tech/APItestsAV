@@ -2,7 +2,7 @@ import allure
 import requests
 import random
 
-BASE_URL = "http://5.181.109.28:9090/api/v3"
+BASE_URL = "https://petstore.swagger.rv-school.ru/api/v3"
 
 @allure.feature("Pet")
 class TestPet:
